@@ -16,7 +16,7 @@ public class Grafo <T>{
             return true;
         return false;
     }
-    //public Node <T> search () {
+    //public boolen HYM () {
     //    return null;
     //}
     public void add (Node <T> next){

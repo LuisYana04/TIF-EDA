@@ -1,7 +1,5 @@
 package Estructuras.LINKEDLIST;
 
-import java.util.ArrayList;
-
 public class Node<E> {
     /* 
     data : Dato
@@ -10,20 +8,18 @@ public class Node<E> {
     */
     private E data;
     private Integer IC;
-    private ArrayList<Node <E> > nextList;
 
-    public Node (E data, int connect, ArrayList <Node <E> > next){
+    public Node (E data, int connect){
         this.data = data;
         this.IC = connect;
-        this.nextList = next;
     }
 
     public Node(E data) {
-        this(data,0,null);
+        this(data,0);
     }
 
     public void setConexiones(Integer IC) {
-    this.IC = IC;
+        this.IC = IC;
     }
 
     public Integer getConexiones() {
@@ -35,13 +31,5 @@ public class Node<E> {
     }
     public E getData() {
         return data;
-    }
-
-    public void setNextList(ArrayList<Node<E>> nextList) {
-        this.nextList = nextList;
-    }
-
-    public ArrayList<Node<E>> getNextList() {
-        return nextList;
     }
 }
