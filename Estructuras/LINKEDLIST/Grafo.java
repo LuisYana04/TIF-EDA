@@ -45,10 +45,15 @@ public class Grafo<T> {
     }
 
     public void add(Node<T> next) {
-        if (this.isEmpty())
-            this.root.add(next);
-        else {
-
+        if (this.isEmpty()){
+            this.root = new ArrayList<Node <T> >();
+            this.add(next);
         }
+        else {
+            this.root.add(next);
+        }
+    }
+    public void editPeso (double Peso){
+        /* Vayan completando */
     }
 }
