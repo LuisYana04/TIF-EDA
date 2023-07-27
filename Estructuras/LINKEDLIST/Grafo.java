@@ -1,29 +1,54 @@
 package Estructuras.LINKEDLIST;
 
-public class Grafo <T>{
-    private Node <T> root;
-    public Grafo (Node <T> root) {
+import java.util.ArrayList;
+
+public class Grafo<T> {
+    /*
+        >> Lista de almacenes
+        >> Matriz de Adyacencia para el peso de Arcos
+     */
+    private ArrayList<Node<T>> root;
+    private ArrayList<ArrayList<Integer>> MA;
+
+    public Grafo(ArrayList<Node<T>> root) {
+        this.root = root;
+        this.MA = new ArrayList<>();
+        if(this.isEmpty())
+        this.setMatrizAdyacencia(0);
+        else
+        this.setMatrizAdyacencia(this.root.size());
+    }
+    public Grafo(){
+        this(null);
+    }
+    public void setMatrizAdyacencia(int length) {
+        int numVertices = length;
+        for (int i = 0; i < numVertices; i++) {
+            ArrayList<Integer> fila = new ArrayList<>();
+            for (int j = 0; j < numVertices; j++) {
+                fila.add(0);
+            }
+            this.MA.add(fila);
+        }
+    }
+
+    public void setRoot(ArrayList<Node<T>> root) {
         this.root = root;
     }
-    public void setRoot(Node<T> root) {
-        this.root = root;
-    }
-    public Node<T> getRoot() {
+
+    public ArrayList<Node<T>> getRoot() {
         return root;
     }
-    public boolean isEmpty (){
-        if(this.root == null)
-            return true;
-        return false;
+
+    public boolean isEmpty() {
+        return root == null;
     }
-    //public boolen HYM () {
-    //    return null;
-    //}
-    public void add (Node <T> next){
-        if(this.isEmpty())
-            this.root = next;
-        else{
-            
+
+    public void add(Node<T> next) {
+        if (this.isEmpty())
+            this.root.add(next);
+        else {
+
         }
     }
 }
