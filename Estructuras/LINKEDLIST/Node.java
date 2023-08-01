@@ -7,17 +7,19 @@ public class Node<E> {
     nextList : Referencia a los nodos
     */
     private E data;
-    private double addressX;
-    private double addressY;
+    private Node <E> nextNode;
 
-    public Node (E data, double x, double y){
+    public Node (E data, Node <E> NewNode){
         this.data = data;
-        this.addressX = x;
-        this.addressY = y;
+        this.nextNode = NewNode;
     }
 
     public Node(E data) {
-        this(data,0,0);
+        this(data,null);
+    }
+
+    public Node () {
+        this(null, null);
     }
 
     public void setData(E data) {
@@ -26,16 +28,14 @@ public class Node<E> {
     public E getData() {
         return data;
     }
-    public void setAddressX(double addressX) {
-        this.addressX = addressX;
+    public void setNextNode(Node<E> nextNode) {
+        this.nextNode = nextNode;
     }
-    public double getAddressX() {
-        return addressX;
+    public Node<E> getNextNode() {
+        return nextNode;
     }
-    public void setAddressY(double addressY) {
-        this.addressY = addressY;
-    }
-    public double getAddressY() {
-        return addressY;
+    @Override
+    public String toString (){
+        return this.data.toString();
     }
 }
