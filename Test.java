@@ -1,6 +1,4 @@
 import Estructuras.AlmacenGrafo.Grafo;
-import Estructuras.LINKEDLIST.LinkedList;
-import Estructuras.LINKEDLIST.Node;
 
 public class Test {
 	public static void main(String[] args) {
@@ -31,6 +29,8 @@ public class Test {
 		System.out.println(g1+ "\n");
 		
         g1.removeVertex("Lima");
+        g1.removeEdge("Arequipa", "Puno");
+        g1.insertArista("Moquegua", "Arequipa");
         System.out.println(g1+ "\n");
 
 	}
