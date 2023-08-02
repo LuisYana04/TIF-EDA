@@ -1,6 +1,8 @@
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
@@ -16,18 +18,16 @@ public class App extends Application{
     }
 
     @Override
-    public void start(Stage inicio) throws Exception {
-        inicio.setTitle("Almacenes");
-        Button aceptar = new Button ("Aceptar");
-        aceptar.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle (ActionEvent event) {
-                System.out.println("Se hixo click");
-            }
-        });
-        StackPane root = new StackPane();
-        root.getChildren().addAll(aceptar);
-        inicio.setScene(new Scene(root, 300, 250));
+    public void start(Stage inicio) throws Exception {  
+        /*
+        * System.out.println(getClass().getResource("Interfaz.fxml"));
+        * Ruta Relativa del doc.fxml
+         */
+        FXMLLoader doc = new FXMLLoader(getClass().getResource("Interfaz.fxml"));
+        Parent root = doc.load ();
+        Scene grind = new Scene (root);
+        inicio.setTitle("ALMACEN");
+        inicio.setScene(grind);
         inicio.show();
     }
 }
