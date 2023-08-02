@@ -1,20 +1,20 @@
 package Estructuras.LINKEDLIST;
 
-public class Node<E> {
+public class Node<A> {
     /* 
     data : Dato
     IC : Indice de Conexiones
     nextList : Referencia a los nodos
     */
-    private E data;
-    private Node <E> nextNode;
+    private A data;
+    private Node <A> nextNode;
 
-    public Node (E data, Node <E> NewNode){
+    public Node (A data, Node <A> NewNode){
         this.data = data;
         this.nextNode = NewNode;
     }
 
-    public Node(E data) {
+    public Node(A data) {
         this(data,null);
     }
 
@@ -22,16 +22,16 @@ public class Node<E> {
         this(null, null);
     }
 
-    public void setData(E data) {
+    public void setData(A data) {
         this.data = data;
     }
-    public E getData() {
+    public A getData() {
         return data;
     }
-    public void setNextNode(Node<E> nextNode) {
+    public void setNextNode(Node<A> nextNode) {
         this.nextNode = nextNode;
     }
-    public Node<E> getNextNode() {
+    public Node<A> getNextNode() {
         return nextNode;
     }
     @Override
