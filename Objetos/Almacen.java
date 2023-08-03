@@ -5,12 +5,12 @@ import Estructuras.LINKEDLIST.Node;
 
 public class Almacen <A>{
 
-    private Integer codigo;
+    private String codigo;
     private String nombre;
     private String direccion;
     private LinkedList<A> productos; // Usamos LinkedList para almacenar los productos
 
-    public Almacen (int code, String name, String adress) {
+    public Almacen (String code, String name, String adress) {
         this.codigo = code;
         this.nombre = name;
         this.direccion = adress;
@@ -18,14 +18,14 @@ public class Almacen <A>{
     }
 
     public Almacen () {
-        this(0, null, null);
+        this(null, null, null);
     }
 
-    public void setCodigo(Integer codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 
-    public Integer getCodigo() {
+    public String getCodigo() {
         return codigo;
     }
     
