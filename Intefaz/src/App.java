@@ -1,3 +1,5 @@
+import Objetos.Almacen;
+import Estructuras.AlmacenGrafo.Grafo;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,6 +16,7 @@ public class App extends Application{
          * CODIGO DE EJECUCION:
          * /usr/bin/env /usr/lib/jvm/jdk-17.0.8/bin/java --module-path ~/Documentos/LIB/javafx-sdk-20.0.2/lib/ --add-modules javafx.controls,javafx.fxml @/tmp/cp_cebk4ll6d9wvdvomjyh5kio56.argfile App cd /home/francis/Escritorio/EDA_TEO/Proyecto_EDA_Teo-Grupo-3 ; /usr/bin/env /usr/lib/jvm/jdk-17.0.8/bin/java @/tmp/cp_cebk4ll6d9wvdvomjyh5kio56.argfile App 
          */
+        Grafo <Almacen> Almacenes = new Grafo <Almacen> ();
         launch(args);
     }
 

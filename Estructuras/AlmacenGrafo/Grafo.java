@@ -102,4 +102,8 @@ public class Grafo <A> {
         Vertice<A> v = this.Graph.searchData(new Vertice<A>(data));
         return v != null;
     }
+    public Vertice getVertex (A data) {
+        Vertice<A> v = this.Graph.searchData(new Vertice<A>(data));
+        return v;
+    }
 }
