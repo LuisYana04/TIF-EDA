@@ -3,20 +3,18 @@ package Objetos;
 import Estructuras.LINKEDLIST.LinkedList;
 import Estructuras.LINKEDLIST.Node;
 
-public class Almacen{
+public class Almacen <A>{
 
     private Integer codigo;
     private String nombre;
     private String direccion;
-    private LinkedList<Productos> productos; // Usamos LinkedList para almacenar los productos
-    private static LinkedList<Almacen> almacenes = new LinkedList<>(); // Lista de todos los almacenes
+    private LinkedList<A> productos; // Usamos LinkedList para almacenar los productos
 
     public Almacen (int code, String name, String adress) {
         this.codigo = code;
         this.nombre = name;
         this.direccion = adress;
-        this.productos = new LinkedList<>();
-        almacenes.insertLast(this);
+        this.productos = new LinkedList<A>();
     }
 
     public Almacen () {
@@ -48,29 +46,24 @@ public class Almacen{
     }
 
     // Método para agregar un producto al almacén
-    public void agregarProducto(Productos producto) {
+    public void agregarProducto(A producto) {
         productos.insertLast(producto);
     }
 
     // Método para eliminar un producto del almacén
-    public void eliminarProducto(Productos producto) {
+    public void eliminarProducto( A producto) {
         productos.remove(producto);
     }
 
     // Método para buscar un producto en todos los almacenes
-    public static boolean buscarProductoEnAlmacenes(Productos producto) {
-        Node<Almacen> aux = almacenes.getRoot();
-        while (aux != null) {
-            if (aux.getData().productos.search(producto)) {
-                return true; // Si el producto se encuentra en algún almacén, retornamos true.
-            }
-            aux = aux.getNextNode();
-        }
+    public boolean buscarProductoEnAlmacenes( A data ) {
+        if(this.productos.searchData(data)!=null)
+            return true;
         return false; // Si no se encuentra el producto en ningún almacén, retornamos false.
     }
 
     // Método para buscar un almacén por su nombre
-    public static Almacen buscarAlmacen(String nombre) {
+    /*public static Almacen buscarAlmacen(String nombre) {
         Node<Almacen> aux = almacenes.getRoot();
         while (aux != null) {
             if (aux.getData().getNombre().equals(nombre)) {
@@ -79,22 +72,23 @@ public class Almacen{
             aux = aux.getNextNode();
         }
         return null; // Si no se encuentra el almacén
-    }
+    }*/
 
     // Método para obtener todos los productos en el almacén
-    public LinkedList<Productos> getProductos() {
+    public LinkedList<A> getProductos() {
         return productos;
     }
 
     // Método para obtener la cantidad de productos en el almacén
     public int getCantidadProductos() {
-        return productos.getSize();
+        //return productos.getSize();
+        return 0;
     }
 
     // Método para establecer una ruta de distribución entre almacenes
-    public void establecerRutaDistribucion(LinkedList<Almacen> almacenes) {
+    /*public void establecerRutaDistribucion(LinkedList<Almacen> almacenes) {
         // Implementar lógica de distribución aquí
-    }
+    } */
 
     @Override
     public String toString () {
