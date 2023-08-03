@@ -12,7 +12,7 @@ import javafx.scene.text.Text;
 
 public class Controller {
 
-    private Grafo <String> Almacenes = new Grafo<String>();
+    private Grafo <Almacen> Almacenes = new Grafo<Almacen>();
 
     @FXML
     private TextField Codigo;
@@ -52,18 +52,18 @@ public class Controller {
         String Direccion = DireccionA.getText();
         String Nombre = NombreA.getText();
         Almacen aux = new Almacen<String> (codigo,Nombre,Direccion);
-        System.out.println("-->"+Tabla.getRowCount());
-        //Tabla.addColumn();
-        RadioButton radioButton = new RadioButton("-------\n"+codigo);
-        radioButton.setId("G-"+ codigo);
+        if(Almacenes.insertVertice(aux)){
+        RadioButton radioButton = new RadioButton("-------\n"+Almacenes.getVertex(aux).getCodigo());
+        radioButton.setId("G-"+ Almacenes.getVertex(aux).getCodigo());
         Label productoLabel = new Label("-------\n"+">Mesa\n>Silla");
-        Label nombreLabel = new Label("-------\n"+Nombre);
-        Label direccionLabel = new Label("-------\n"+Direccion);
+        Label nombreLabel = new Label("-------\n"+Almacenes.getVertex(aux).getNombre());
+        Label direccionLabel = new Label("-------\n"+Almacenes.getVertex(aux).getDireccion());
 
         // Obtener el número actual de filas en el GridPane y agregar la nueva fila en la siguiente posición
         int numRows = Tabla.getRowCount();
         Tabla.addRow(numRows, radioButton,nombreLabel, direccionLabel, productoLabel);
         System.out.println("-->"+Tabla.getRowCount());
+        }
     }
 
     @FXML
@@ -78,8 +78,8 @@ public class Controller {
 
     @FXML
     void Cambiar(ActionEvent event) {
-        Vertice nuevo = null;
-        Vertice aux = Almacenes.getVertex(null);
+        Almacen nuevo = null;
+        Almacen aux = Almacenes.getVertex(null);
         aux = nuevo;
     }
 
@@ -90,7 +90,7 @@ public class Controller {
 
     @FXML
     void Editar(ActionEvent event) {
-      Vertice aux;
+      Almacen aux;
       if(Almacenes.searchVertex(null))
         aux = Almacenes.getVertex(null);
       else
@@ -103,7 +103,7 @@ public class Controller {
     }
 
 
-    public void setAlmacenes(Grafo<String> almacenes) {
+    public void setAlmacenes(Grafo<Almacen> almacenes) {
         Almacenes = almacenes;
     }
     

@@ -20,12 +20,16 @@ public class Grafo <A> {
     public boolean isEmpty() {
         return Graph == null;
     }    
-    public void insertVertice(A data) {
+    public boolean insertVertice (A data) {
 		Vertice<A> v = new Vertice<A>(data);
-		if (this.Graph.search(v))
+		if (this.Graph.search(v)){
 			System.out.println("Vertice con "+ data +" ya fue insertado");
-		else
+            return false;
+        }
+		else{
 			this.Graph.insertFirst(v);
+            return true;
+        }
 	}
 	
 	public void insertArista(A dataOri, A dataDes) {  
@@ -102,8 +106,8 @@ public class Grafo <A> {
         Vertice<A> v = this.Graph.searchData(new Vertice<A>(data));
         return v != null;
     }
-    public Vertice getVertex (A data) {
+    public A getVertex (A data) {
         Vertice<A> v = this.Graph.searchData(new Vertice<A>(data));
-        return v;
+        return v.getAlmacen();
     }
 }

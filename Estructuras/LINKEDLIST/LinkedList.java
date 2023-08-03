@@ -23,7 +23,7 @@ public class LinkedList <A> {
     public boolean search(A x) {
 		Node<A> aux = this.root;
 		for(; aux != null; aux = aux.getNextNode()) {
-			if (aux.getData().equals(x)) {
+			if (aux.getData().toString().equals(x.toString())) {
 				return true;
 			}
 		}
@@ -33,7 +33,7 @@ public class LinkedList <A> {
     public A searchData(A x) {
 		Node<A> aux = this.root;
 		while(aux != null) {
-			if (aux.getData().equals(x)) {
+			if (aux.getData().toString().equals(x.toString())) {
 				return aux.getData();
 			}
 			aux = aux.getNextNode();
