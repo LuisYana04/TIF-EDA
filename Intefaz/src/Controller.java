@@ -1,11 +1,13 @@
 import Estructuras.AlmacenGrafo.Grafo;
 import Estructuras.AlmacenGrafo.Vertice;
 import Estructuras.LINKEDLIST.LinkedList;
+import Estructuras.LINKEDLIST.Node;
 import Objetos.Almacen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
@@ -59,27 +61,32 @@ public class Controller {
 
     @FXML
     void Agregar(ActionEvent event) {
-        String codigo = CodigoA.getText();
-        String Direccion = DireccionA.getText();
-        String Nombre = NombreA.getText();
-        Almacen aux = new Almacen<String> (codigo,Nombre,Direccion);
+        Almacen aux = new Almacen<String> (CodigoA.getText(),NombreA.getText(),DireccionA.getText());
         if(Almacenes.insertVertice(aux)){
-            RadioButton radioButton = new RadioButton("-------\n"+Almacenes.getVertex(aux).getCodigo());
-            radioButton.setId(Almacenes.getVertex(aux).getCodigo());
-            radioButton.setOnAction(this::handleRadioButtonAction);
-            Seleccion.insertLast(radioButton);
-            Label productoLabel = new Label("-------\n"+">Mesa\n>Silla");
-            Label nombreLabel = new Label("-------\n"+Almacenes.getVertex(aux).getNombre());
-            Label direccionLabel = new Label("-------\n"+Almacenes.getVertex(aux).getDireccion());
-            int numRows = Tabla.getRowCount();
-            Tabla.addRow(numRows, radioButton,nombreLabel, direccionLabel, productoLabel);
-            System.out.println("-->"+Tabla.getRowCount());
+            RellenarLista(aux,CodigoA.getText(),NombreA.getText(),DireccionA.getText(),null);
         }
     }
 
     @FXML
     void Borrar(ActionEvent event) {
-        this.Almacenes.removeVertex(null);
+        //this.Almacenes.removeVertex(null);
+        Node<RadioButton> aux = Seleccion.getRoot();
+        while(aux != null){
+            System.out.println("$$");
+            if(aux.getData().isSelected()){
+                System.out.println("%%");
+                //Seleccion.remove(aux.getData());
+                Almacen data_aux = (Almacen) aux.getData().getUserData();
+                System.out.println(data_aux.toString());
+                aux = aux.getNextNode();
+                Almacenes.removeVertex(data_aux);
+                Reset();
+
+                //Reset();
+            }
+            else
+                aux = aux.getNextNode();
+        }
     }
 
     @FXML
@@ -110,21 +117,48 @@ public class Controller {
 
     @FXML
     void Update(ActionEvent event) {
-        
+        Reset();
     }
 
+
+    void RellenarLista (Almacen Alm,String Code, String Nombre, String Direccion, String Productos) {
+        RadioButton radioButton = new RadioButton("-------\n"+Code);
+        radioButton.setUserData(Alm);
+        radioButton.setId(Code);
+        Seleccion.insertLast(radioButton);
+        Label productoLabel = new Label("-------\n"+">Mesa\n>Silla");
+        Label nombreLabel = new Label("-------\n"+Nombre);
+        Label direccionLabel = new Label("-------\n"+Direccion);
+        int numRows = Tabla.getRowCount();
+        Tabla.addRow(numRows, radioButton,nombreLabel, direccionLabel, productoLabel);
+        System.out.println("-->"+Tabla.getRowCount());
+    }
+
+    void RellenarLista () {
+        Node<Vertice<Almacen>> aux = Almacenes.getRoot().getRoot();
+        while(aux != null){
+            Almacen data = aux.getData().getAlmacen();
+            RellenarLista(data,data.getCodigo(), data.getNombre(), data.getDireccion(), null);
+            aux = aux.getNextNode();
+        }
+    }
+
+    void Limpia() {
+    Seleccion = new LinkedList<RadioButton>();
+    int numRows = Tabla.getRowCount();
+    Tabla.getChildren().removeIf(node -> {
+        Integer rowIndex = GridPane.getRowIndex(node);
+        // Verificar si el índice de fila no es nulo y está dentro del rango a eliminar.
+        return rowIndex != null && rowIndex >= 2 && rowIndex <= numRows;
+    });
+}
 
     public void setAlmacenes(Grafo<Almacen> almacenes) {
         Almacenes = almacenes;
     }
-    
-    private void handleRadioButtonAction(ActionEvent event) {
-        RadioButton selectedRadioButton = (RadioButton) event.getSource();
-        if (selectedRadioButton != null) {
-            System.out.println("RadioButton seleccionado: " + selectedRadioButton.getId());
-        } else {
-            System.out.println("Ningún RadioButton seleccionado.");
-        }
-    }
 
+    void Reset(){
+        Limpia();
+        RellenarLista();
+    }
 }
