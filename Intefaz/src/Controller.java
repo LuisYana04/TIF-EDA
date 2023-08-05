@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 import Estructuras.AlmacenGrafo.Grafo;
 import Estructuras.AlmacenGrafo.Vertice;
 import Estructuras.LINKEDLIST.LinkedList;
@@ -5,6 +7,9 @@ import Estructuras.LINKEDLIST.Node;
 import Objetos.Almacen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
@@ -14,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class Controller {
 
@@ -78,8 +84,8 @@ public class Controller {
                 //Seleccion.remove(aux.getData());
                 Almacen data_aux = (Almacen) aux.getData().getUserData();
                 System.out.println(data_aux.toString());
-                aux = aux.getNextNode();
                 Almacenes.removeVertex(data_aux);
+                System.out.println(Tabla.getRowCount());
                 Reset();
 
                 //Reset();
@@ -119,6 +125,19 @@ public class Controller {
     void Update(ActionEvent event) {
         Reset();
     }
+
+    @FXML
+    void ShowPlano(ActionEvent event) throws IOException {
+    // Cargar el FXML de la nueva ventana "Plano" (supongamos que se llama Plano.fxml)
+    Parent root = FXMLLoader.load(getClass().getResource("Plano.fxml"));
+    Scene grind = new Scene(root);
+
+    Stage newStage = new Stage();
+    newStage.setTitle("Grafica");
+    newStage.setScene(grind);
+    newStage.show();
+}
+
 
 
     void RellenarLista (Almacen Alm,String Code, String Nombre, String Direccion, String Productos) {
