@@ -1,7 +1,5 @@
 import Objetos.Almacen;
-
 import java.io.IOException;
-
 import Estructuras.AlmacenGrafo.Grafo;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
