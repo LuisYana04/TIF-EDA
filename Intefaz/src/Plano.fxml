@@ -2,53 +2,19 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="631.0" prefWidth="666.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ControllerPlano">
-   <center>
-      <GridPane alignment="CENTER" prefHeight="193.0" prefWidth="339.0" stylesheets="file:/home/francis/Escritorio/EDA_TEO/Proyecto_EDA_Teo-Grupo-3/Intefaz/media/CSS/style.css" BorderPane.alignment="CENTER">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <RadioButton contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="63.0" prefWidth="71.0" stylesheets="@../media/CSS/style.css" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <graphic>
-                  <ImageView fitHeight="45.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="file:/home/francis/Escritorio/EDA_TEO/Proyecto_EDA_Teo-Grupo-3/Intefaz/media/almacen.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </RadioButton>
-            <RadioButton contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="63.0" prefWidth="71.0" stylesheets="@../media/CSS/style.css" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <graphic>
-                  <ImageView fitHeight="45.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="file:/home/francis/Escritorio/EDA_TEO/Proyecto_EDA_Teo-Grupo-3/Intefaz/media/almacen.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </RadioButton>
-         </children>
-      </GridPane>
-   </center>
    <top>
       <HBox alignment="CENTER" prefHeight="29.0" prefWidth="315.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox prefHeight="29.0" prefWidth="242.0">
                <children>
                   <Button mnemonicParsing="false" prefHeight="7.0" prefWidth="26.0">
                      <graphic>
@@ -59,14 +25,22 @@
                         </ImageView>
                      </graphic>
                   </Button>
+                  <Button mnemonicParsing="false" onAction="#update" prefHeight="24.0" prefWidth="110.0" text="UPDATE" />
                   <TextField />
                </children>
             </HBox>
-            <Button mnemonicParsing="false" text="UNIR" />
-            <Button mnemonicParsing="false" text="SEPARAR" />
-            <Button mnemonicParsing="false" text="CALCULAR RUTA" />
+            <Button mnemonicParsing="false" onAction="#Agregar" text="UNIR" />
+            <Button mnemonicParsing="false" onAction="#Separar" text="CORTAR" />
+            <Button mnemonicParsing="false" onAction="#Calcular" text="RUTA" />
             <Label text="Ningun AlMACEN" />
          </children>
       </HBox>
    </top>
+   <center>
+      <ScrollPane prefHeight="559.0" prefWidth="653.0" BorderPane.alignment="CENTER">
+        <content>
+          <AnchorPane fx:id="Plano" minHeight="0.0" minWidth="0.0" prefHeight="587.0" prefWidth="658.0" />
+        </content>
+      </ScrollPane>
+   </center>
 </BorderPane>

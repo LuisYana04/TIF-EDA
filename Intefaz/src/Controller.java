@@ -129,9 +129,11 @@ public class Controller {
     @FXML
     void ShowPlano(ActionEvent event) throws IOException {
     // Cargar el FXML de la nueva ventana "Plano" (supongamos que se llama Plano.fxml)
-    Parent root = FXMLLoader.load(getClass().getResource("Plano.fxml"));
+    FXMLLoader carga = new FXMLLoader(getClass().getResource("Plano.fxml"));
+    Parent root = carga.load();
     Scene grind = new Scene(root);
-
+    ControllerPlano conexion = carga.getController();
+    conexion.setAlmacenes(this.Almacenes.getRoot());
     Stage newStage = new Stage();
     newStage.setTitle("Grafica");
     newStage.setScene(grind);
