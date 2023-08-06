@@ -9,12 +9,15 @@ public class Almacen <A>{
     private String nombre;
     private String direccion;
     private LinkedList<A> productos; // Usamos LinkedList para almacenar los productos
+    private static LinkedList<Almacen> todosAlmacenes = new LinkedList<>();
+
 
     public Almacen (String code, String name, String adress) {
         this.codigo = code;
         this.nombre = name;
         this.direccion = adress;
         this.productos = new LinkedList<A>();
+        todosAlmacenes.insertLast(this);
     }
 
     public Almacen () {
@@ -56,39 +59,104 @@ public class Almacen <A>{
     }
 
     // Método para buscar un producto en todos los almacenes
-    public boolean buscarProductoEnAlmacenes( A data ) {
+    public boolean buscarProductoEnAlmacen( A data ) {
         if(this.productos.searchData(data)!=null)
             return true;
         return false; // Si no se encuentra el producto en ningún almacén, retornamos false.
     }
 
-    // Método para buscar un almacén por su nombre
-    /*public static Almacen buscarAlmacen(String nombre) {
-        Node<Almacen> aux = almacenes.getRoot();
+    public static Almacen buscarAlmacenPorCodigo(Integer codigo) {
+        Node<Almacen> aux = todosAlmacenes.getRoot();
         while (aux != null) {
-            if (aux.getData().getNombre().equals(nombre)) {
+            if (aux.getData().getCodigo().equals(codigo)) {
                 return aux.getData();
             }
             aux = aux.getNextNode();
         }
         return null; // Si no se encuentra el almacén
-    }*/
+    }
 
     // Método para obtener todos los productos en el almacén
     public LinkedList<A> getProductos() {
         return productos;
     }
 
-    // Método para obtener la cantidad de productos en el almacén
-    public int getCantidadProductos() {
-        //return productos.getSize();
-        return 0;
+    public static void mostrarTodosLosAlmacenes() {
+        System.out.println("Lista de Almacenes:");
+        System.out.println("====================");
+        for (Node<Almacen> aux = todosAlmacenes.getRoot(); aux != null; aux = aux.getNextNode()) {
+            System.out.println(aux.getData().toString());
+        }
     }
 
-    // Método para establecer una ruta de distribución entre almacenes
-    /*public void establecerRutaDistribucion(LinkedList<Almacen> almacenes) {
-        // Implementar lógica de distribución aquí
-    } */
+    public static boolean buscarProductoEnAlmacenes(Productos producto) {
+        Node<Almacen> aux = todosAlmacenes.getRoot();
+        while (aux != null) {
+            if (aux.getData().buscarProductoEnAlmacen(producto)) {
+                return true; // Si el producto se encuentra en algún almacén, retornamos true.
+            }
+            aux = aux.getNextNode();
+        }
+        return false; // Si no se encuentra el producto en ningún almacén, retornamos false.
+    }
+
+    private void trasladarProductos(Almacen almacenaDarDeBaja) {
+        LinkedList<Productos> productosAlmacenBaja = almacenaDarDeBaja.getProductos();
+        Node<Productos> aux = productosAlmacenBaja.getRoot();
+
+        while (aux != null) {
+            Productos producto = aux.getData();
+
+            // Encontrar el almacén con menor cantidad de este producto
+            Almacen destino = getAlmacenConMenorCantidadProducto();
+
+            // Trasladar el producto al almacén destino
+            destino.agregarProducto(producto);
+
+            aux = aux.getNextNode();
+        }
+    }
+
+    // Método para obtener el almacén con menor cantidad de un producto en la lista de almacenes
+    private Almacen getAlmacenConMenorCantidadProducto() {
+        Almacen destino = null;
+        int minCantidad = Integer.MAX_VALUE;
+
+        Node<Almacen> auxAlmacenes = todosAlmacenes.getRoot();
+        while (auxAlmacenes != null) {
+            int cantidadProducto = auxAlmacenes.getData().getCantidadProducto();
+            if (cantidadProducto < minCantidad) {
+                destino = auxAlmacenes.getData();
+                minCantidad = cantidadProducto;
+            }
+            auxAlmacenes = auxAlmacenes.getNextNode();
+        }
+
+        return destino;
+    }
+
+    // Método para dar de baja un almacén
+    public static void darDeBajaAlmacen(Almacen almacenaDarDeBaja) {
+        // Trasladar los productos del almacén a otros almacenes
+        almacenaDarDeBaja.trasladarProductos(almacenaDarDeBaja);
+
+        // Eliminar el almacén de la lista de todos los almacenes
+        todosAlmacenes.remove(almacenaDarDeBaja);
+    }
+
+    // Método para obtener la cantidad de un producto en el almacén
+    private int getCantidadProducto() {
+        int cantidad = 0;
+        Node<A> aux = productos.getRoot();
+
+        while (aux != null) {
+            cantidad++;
+            aux = aux.getNextNode();
+        }
+
+        return cantidad;
+    }
+
 
     @Override
     public String toString () {
