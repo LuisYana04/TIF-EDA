@@ -1,9 +1,9 @@
 import java.util.*;
 
-public class Trie_Products {
+public class PrincipalProductos {
 
     public static void main(String[] args) {
-        Estructura trie = new Estructura();
+        EstructuraProductos trie = new EstructuraProductos();
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Bienvenido al sistema de productos");
@@ -20,7 +20,7 @@ public class Trie_Products {
         if (trie.search(nombreProducto)) {
             Producto productoEncontrado = trie.buscarProducto(nombreProducto);
             System.out.println("Producto encontrado: " + productoEncontrado.getDescripcion()
-                    + " - Precio: " + productoEncontrado.getPrecio());
+                    + " - Precio: " + productoEncontrado.getPrecio() + " - Stock: " + productoEncontrado.getStock());
         } else {
             System.out.println("Producto no encontrado.");
         }

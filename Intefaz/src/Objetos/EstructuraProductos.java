@@ -1,7 +1,7 @@
-public class Estructura {
+public class EstructuraProductos {
     private TrieNode root;
 
-    public Estructura() {
+    public EstructuraProductos() {
         root = new TrieNode();
     }
 

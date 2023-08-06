@@ -1,4 +1,4 @@
-package Objetos;
+
 
 public class Producto {
     private int codigo;
