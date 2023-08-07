@@ -145,19 +145,34 @@ public class GUI {
         buttonPanel.setLayout(new GridLayout(3, 2, 10, 10)); // 3 rows, 2 columns, 10 pixels horizontal and vertical gap
     
         // Create buttons
-        JButton addProductButton = new JButton("Add Product");
-        JButton extractProductButton = new JButton("Extract Product");
-        JButton findShortestRouteButton = new JButton("Find Shortest Route");
-        JButton deleteWarehouseButton = new JButton("Delete Warehouse");
-        JButton viewProductsButton = new JButton("View Products");
-        JButton addWarehouseButton = new JButton("Add Warehouse");
-        JButton uploadAlmacenesButton = new JButton("Upload Almacenes");
-        JButton uploadProductosButton = new JButton("Upload Productos");
-        JButton uploadRutasButton = new JButton("Upload Rutas");
-        JButton viewAlmacenesButton = new JButton("View Almacenes");
+        JButton addProductButton = new JButton("Agregar Producto");
+        JButton extractProductButton = new JButton("Extraer Product");
+        JButton findShortestRouteButton = new JButton("Encontrar Ruta Rapida");
+        JButton deleteWarehouseButton = new JButton("Borrar Almacen");
+        JButton viewProductsButton = new JButton("Ver Productos");
+        JButton addWarehouseButton = new JButton("Agregar Almacen");
+        JButton uploadAlmacenesButton = new JButton("Subir Almacenes");
+        JButton uploadProductosButton = new JButton("Subir Productos");
+        JButton uploadRutasButton = new JButton("Subir Rutas");
+        JButton viewAlmacenesButton = new JButton("Ver Almacenes");
+        JButton searchProductButton = new JButton("Buscar Producto en Todos los Almacenes");
+        JButton actualizarArchivosButton = new JButton("Actualizar Archivos");
 
         // Add action listeners to the buttons
-        
+
+        actualizarArchivosButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                actualizarArchivos();
+            }
+        });
+
+        searchProductButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                searchProduct();
+            }
+        });
+
         viewAlmacenesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 viewAlmacenes();
@@ -223,12 +238,14 @@ public class GUI {
         buttonPanel.add(extractProductButton);
         buttonPanel.add(findShortestRouteButton);
         buttonPanel.add(deleteWarehouseButton);
-        buttonPanel.add(viewProductsButton);
         buttonPanel.add(addWarehouseButton);
+        buttonPanel.add(viewProductsButton);
+        buttonPanel.add(searchProductButton);  
+        buttonPanel.add(viewAlmacenesButton);
         buttonPanel.add(uploadAlmacenesButton);
         buttonPanel.add(uploadProductosButton);
         buttonPanel.add(uploadRutasButton);
-        buttonPanel.add(viewAlmacenesButton);
+        buttonPanel.add(actualizarArchivosButton);
     
         // Create a text area to display output
         outputTextArea = new JTextArea();
@@ -244,6 +261,46 @@ public class GUI {
         // Set the size and make the frame visible
         frame.setSize(600, 400);
         frame.setVisible(true);
+    }
+
+    private static void actualizarArchivos() {
+        // Llamar a los métodos de actualización de CSV del grafo
+        grafoAlmacenes.actualizarAlmacenesCSV();
+        grafoAlmacenes.actualizarProductosCSV();
+        grafoAlmacenes.actualizarRutasCSV();
+
+        // Mostrar un mensaje de confirmación al usuario
+        JOptionPane.showMessageDialog(frame, "Archivos actualizados correctamente.");
+    }
+
+    private static void searchProduct() {
+        // Método para buscar un producto en todos los almacenes
+
+        // Solicitar al usuario el código del producto a buscar
+        String codigoProductoStr = JOptionPane.showInputDialog(frame, "Ingresa el código del producto a buscar:");
+        if (codigoProductoStr == null) return; // El usuario canceló la operación
+
+        try {
+            int codigoProducto = Integer.parseInt(codigoProductoStr);
+
+            // Buscar el producto en todos los almacenes del grafo
+            Producto productoEnAlmacen = grafoAlmacenes.buscarProductoEnTodosAlmacenes(codigoProducto);
+
+            if (productoEnAlmacen != null) {
+                // El producto fue encontrado en algún almacén
+                String mensaje = "El producto con código " + codigoProducto + " fue encontrado en el almacén:\n";
+                mensaje += "Nombre del almacén: " + grafoAlmacenes.buscarAlmacenPorCodigo(productoEnAlmacen.getCodigoAlmacen()).getNombre() + "\n";
+                mensaje += "Descripción del producto: " + productoEnAlmacen.getDescripcion() + "\n";
+                mensaje += "Stock: " + productoEnAlmacen.getStock() + "\n";
+                JOptionPane.showMessageDialog(frame, mensaje);
+            } else {
+                // El producto no fue encontrado en ningún almacén
+                JOptionPane.showMessageDialog(frame, "El producto con código " + codigoProducto + " no fue encontrado en ningún almacén.");
+            }
+        } catch (NumberFormatException ex) {
+            // Error en la conversión del código del producto
+            JOptionPane.showMessageDialog(frame, "Ingresa un código de producto válido (número entero).");
+        }
     }
 
     private static void viewAlmacenes() {
@@ -300,13 +357,13 @@ public class GUI {
         String direccion = JOptionPane.showInputDialog(frame, "Ingresa la dirección del almacén:");
         if (direccion == null) return;
     
-        // Crear el almacén y agregarlo al grafo
-        Almacen almacen = new Almacen(codigo, nombre, direccion);
-        grafoAlmacenes.insertVertex(almacen);
+        // Agregar el almacén utilizando el método agregarAlmacen de GrafoAlmacenes
+        grafoAlmacenes.agregarAlmacen(codigo, nombre, direccion);
     
         // Show confirmation message to the user
         JOptionPane.showMessageDialog(frame, "Almacén agregado correctamente.");
     }
+    
 
     private static void viewProducts() {
         String codigoAlmacenStr = JOptionPane.showInputDialog(frame, "Ingresa el código del almacén para ver sus productos:");

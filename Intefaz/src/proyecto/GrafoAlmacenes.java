@@ -35,6 +35,9 @@ public class GrafoAlmacenes extends GraphLink<Almacen> {
         Almacen almacen = buscarAlmacenPorCodigo(codigoAlmacen);
         if (almacen != null) {
             almacen.agregarProducto(producto);
+
+            // Llamar al método de actualización del archivo CSV después de agregar el producto
+            actualizarProductosCSV();
         } else {
             System.out.println("El almacén con código " + codigoAlmacen + " no existe.");
         }
@@ -47,9 +50,55 @@ public class GrafoAlmacenes extends GraphLink<Almacen> {
         Almacen almacen = buscarAlmacenPorCodigo(codigoAlmacen);
         if (almacen != null) {
             almacen.eliminarProducto(codigoProducto);
+
+            // Llamar al método de actualización del archivo CSV después de eliminar el producto
+            actualizarProductosCSV();
         } else {
             System.out.println("El almacén con código " + codigoAlmacen + " no existe.");
         }
+    }
+
+    public void eliminarAlmacen(int codigoAlmacen) {
+        Almacen almacenAEliminar = buscarAlmacenPorCodigo(codigoAlmacen);
+        if (almacenAEliminar != null) {
+            // Buscar el almacén con menos productos
+            Almacen almacenConMenosProductos = getAlmacenConMenosProductos();
+
+            // Trasladar todos los productos del almacén eliminado al almacén con menos productos
+            for (Producto producto : almacenAEliminar.getInventario().getProductos()) {
+                almacenConMenosProductos.agregarProducto(producto);
+            }
+
+            // Eliminar el almacén
+            super.removeVertex(almacenAEliminar);
+
+            // Llamar al método de actualización del archivo CSV después de eliminar el almacén
+            actualizarAlmacenesCSV();
+            actualizarProductosCSV();
+            actualizarRutasCSV();
+        } else {
+            System.out.println("El almacén con código " + codigoAlmacen + " no existe.");
+        }
+    }
+
+    public void agregarAlmacen(int codigo, String nombre, String direccion) {
+        // Verificar si ya existe un almacén con el mismo código
+        if (buscarAlmacenPorCodigo(codigo) != null) {
+            System.out.println("Ya existe un almacén con el código " + codigo);
+            return;
+        }
+    
+        // Crear un nuevo objeto Almacen con los datos proporcionados
+        Almacen nuevoAlmacen = new Almacen(codigo, nombre, direccion);
+    
+        // Crear un nuevo objeto Vertex<Almacen> con el almacén creado
+        Vertex<Almacen> nuevoVertex = new Vertex<Almacen>(nuevoAlmacen);
+    
+        // Agregar el nuevo vértice al grafo
+        listVertex.insertLast(nuevoVertex);
+    
+        // Llamar al método de actualización del archivo CSV después de agregar el almacén
+        actualizarAlmacenesCSV();
     }
 
     public Producto buscarProducto(int codigoAlmacen, int codigoProducto) {
@@ -64,6 +113,20 @@ public class GrafoAlmacenes extends GraphLink<Almacen> {
             return null;
         }
     }
+
+    public Producto buscarProductoEnTodosAlmacenes(int codigoProducto) {
+        for (Vertex<Almacen> vertex : listVertex) {
+            Almacen almacen = vertex.getData();
+            Producto productoEnAlmacen = almacen.buscarProducto(codigoProducto);
+            if (productoEnAlmacen != null) {
+                // El producto fue encontrado en este almacén
+                return productoEnAlmacen;
+            }
+        }
+        // El producto no fue encontrado en ningún almacén
+        return null;
+    }
+    
     public Almacen getAlmacenConMenosProductos() {
         Almacen almacenConMenosProductos = null;
         int minStock = Integer.MAX_VALUE;
@@ -80,32 +143,7 @@ public class GrafoAlmacenes extends GraphLink<Almacen> {
         return almacenConMenosProductos;
     }
     
-    public void eliminarAlmacen(int codigoAlmacen) {
-        Almacen almacenAEliminar = buscarAlmacenPorCodigo(codigoAlmacen);
-        if (almacenAEliminar != null) {
-            // Buscar el almacén con menos productos
-            Almacen almacenConMenosProductos = getAlmacenConMenosProductos();
-
-            // Trasladar todos los productos del almacén eliminado al almacén con menos productos
-            for (Producto producto : almacenAEliminar.getInventario().getProductos()) {
-                almacenConMenosProductos.agregarProducto(producto);
-            }
-
-            // Eliminar el almacén
-            super.removeVertex(almacenAEliminar);
-
-            // Actualizar los archivos CSV
-            actualizarAlmacenesCSV();
-            actualizarProductosCSV();
-            actualizarRutasCSV();
-        } else {
-            System.out.println("El almacén con código " + codigoAlmacen + " no existe.");
-        }
-    }
-
-    
-
-    private void actualizarAlmacenesCSV() {
+    public void actualizarAlmacenesCSV() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(PATH_ALMACENES))) {
             writer.println("Codigo;Nombre;Direccion");
             for (Vertex<Almacen> vertex : this.listVertex) {
@@ -117,7 +155,7 @@ public class GrafoAlmacenes extends GraphLink<Almacen> {
         }
     }
 
-    private void actualizarProductosCSV() {
+    public void actualizarProductosCSV() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(PATH_PRODUCTOS))) {
             writer.println("Codigo;Descripcion;Stock;CodigoAlmacen");
             for (Vertex<Almacen> vertex : this.listVertex) {
@@ -132,7 +170,7 @@ public class GrafoAlmacenes extends GraphLink<Almacen> {
         }
     }
 
-    private void actualizarRutasCSV() {
+    public void actualizarRutasCSV() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(PATH_RUTAS))) {
             writer.println("codigoAlmacenOrigen;distancia;codigoAlmacenDestino");
             for (Vertex<Almacen> vertex : this.listVertex) {
