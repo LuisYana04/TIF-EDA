@@ -1,16 +1,19 @@
-package Objetos;
 
-public class Productos {
-    private Integer codigo;
+
+public class Producto {
+    private int codigo;
+    private double precio;
     private String descripcion;
     private Integer stock;
-    public Productos (int code, String description, int stock) {
-        this.codigo = code;
-        this.descripcion = description;
+
+    public Producto(int codigo, String nombre, double precio, int stock) {
+        this.codigo = codigo;
+        this.precio = precio;
+        this.descripcion = nombre;
         this.stock = stock;
     }
-    public Productos () {
-        this(0, null, 0);
+    public Producto() {
+        this(0, null, 0, 0);
     }
     public void setCodigo(Integer codigo) {
         this.codigo = codigo;
@@ -29,6 +32,12 @@ public class Productos {
     }
     public Integer getStock() {
         return stock;
+    }
+    public double getPrecio() {
+        return precio;
+    }
+    public void setPrecio(double precio) {
+        this.precio = precio;
     }
     @Override
     public String toString () {
