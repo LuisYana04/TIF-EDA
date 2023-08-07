@@ -1,165 +1,84 @@
-package Objetos;
+package proyecto;
 
-import Estructuras.LINKEDLIST.LinkedList;
-import Estructuras.LINKEDLIST.Node;
+import TreeBst.ArbolBinario;
+import TreeBst.NodoArbol;
 
-public class Almacen <A>{
-
-    private String codigo;
+public class Almacen {
+    private int codigo;
     private String nombre;
     private String direccion;
-    private LinkedList<A> productos; // Usamos LinkedList para almacenar los productos
-    private static LinkedList<Almacen> todosAlmacenes = new LinkedList<>();
+    private ArbolBinario<Producto> inventario;
 
-
-    public Almacen (String code, String name, String adress) {
-        this.codigo = code;
-        this.nombre = name;
-        this.direccion = adress;
-        this.productos = new LinkedList<A>();
-        todosAlmacenes.insertLast(this);
-    }
-
-    public Almacen () {
-        this(null, null, null);
-    }
-
-    public void setCodigo(String codigo) {
+    public Almacen(int codigo, String nombre, String direccion) {
         this.codigo = codigo;
-    }
-
-    public String getCodigo() {
-        return codigo;
-    }
-    
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setNombre(String nombre) {
         this.nombre = nombre;
+        this.direccion = direccion;
+        this.inventario = new ArbolBinario<>();
+    }
+
+    public int getCodigo() {
+        return codigo;
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    // Método para agregar un producto al almacén
-    public void agregarProducto(A producto) {
-        productos.insertLast(producto);
+    public String getDireccion() {
+        return direccion;
+    }
+    public ArbolBinario<Producto> getInventario() {
+        return inventario;
     }
 
-    // Método para eliminar un producto del almacén
-    public void eliminarProducto( A producto) {
-        productos.remove(producto);
+    
+    public void agregarProducto(Producto producto) {
+        Producto productoExistente = inventario.buscar(producto);
+        if (productoExistente != null) {
+            // Si el producto ya existe en el inventario, aumentamos su stock
+            productoExistente.setStock(productoExistente.getStock() + producto.getStock());
+        } else {
+            // Si el producto no existe en el inventario, lo insertamos
+            producto.setCodigoAlmacen(this.codigo);  // Asigna el código del almacén al producto
+            inventario.insertar(producto);
+        }
     }
 
-    // Método para buscar un producto en todos los almacenes
-    public boolean buscarProductoEnAlmacen( A data ) {
-        if(this.productos.searchData(data)!=null)
-            return true;
-        return false; // Si no se encuentra el producto en ningún almacén, retornamos false.
+    public Producto eliminarProducto(int codigoProducto) {
+        Producto productoAEliminar = new Producto(codigoProducto, "", 0, this.codigo);  // Código del almacén agregado al constructor
+        return inventario.eliminar(productoAEliminar);
     }
 
-    public static Almacen buscarAlmacenPorCodigo(Integer codigo) {
-        Node<Almacen> aux = todosAlmacenes.getRoot();
-        while (aux != null) {
-            if (aux.getData().getCodigo().equals(codigo)) {
-                return aux.getData();
+    public Producto buscarProducto(int codigoProducto) {
+        Producto productoABuscar = new Producto(codigoProducto, "", 0, this.codigo);  // Código del almacén agregado al constructor
+        return inventario.buscar(productoABuscar);
+    }
+
+    public void mostrarProductos() {
+        System.out.println("Productos en el almacén " + nombre + ":");
+        inventario.recorridoInorden();
+    }
+
+    public void extraerProducto(int codigoProducto, int cantidad) {
+        Producto producto = buscarProducto(codigoProducto);
+        if (producto != null) {
+            if (producto.getStock() >= cantidad) {
+                producto.setStock(producto.getStock() - cantidad);
+                System.out.println("Se extrajeron " + cantidad + " unidades del producto " + producto.getDescripcion());
+            } else {
+                System.out.println("No hay suficiente stock del producto " + producto.getDescripcion() + ".");
             }
-            aux = aux.getNextNode();
-        }
-        return null; // Si no se encuentra el almacén
-    }
-
-    // Método para obtener todos los productos en el almacén
-    public LinkedList<A> getProductos() {
-        return productos;
-    }
-
-    public static void mostrarTodosLosAlmacenes() {
-        System.out.println("Lista de Almacenes:");
-        System.out.println("====================");
-        for (Node<Almacen> aux = todosAlmacenes.getRoot(); aux != null; aux = aux.getNextNode()) {
-            System.out.println(aux.getData().toString());
+        } else {
+            System.out.println("El producto con código " + codigoProducto + " no existe en este almacén.");
         }
     }
 
-    public static boolean buscarProductoEnAlmacenes(Productos producto) {
-        Node<Almacen> aux = todosAlmacenes.getRoot();
-        while (aux != null) {
-            if (aux.getData().buscarProductoEnAlmacen(producto)) {
-                return true; // Si el producto se encuentra en algún almacén, retornamos true.
-            }
-            aux = aux.getNextNode();
-        }
-        return false; // Si no se encuentra el producto en ningún almacén, retornamos false.
-    }
-
-    private void trasladarProductos(Almacen almacenaDarDeBaja) {
-        LinkedList<Productos> productosAlmacenBaja = almacenaDarDeBaja.getProductos();
-        Node<Productos> aux = productosAlmacenBaja.getRoot();
-
-        while (aux != null) {
-            Productos producto = aux.getData();
-
-            // Encontrar el almacén con menor cantidad de este producto
-            Almacen destino = getAlmacenConMenorCantidadProducto();
-
-            // Trasladar el producto al almacén destino
-            destino.agregarProducto(producto);
-
-            aux = aux.getNextNode();
-        }
-    }
-
-    // Método para obtener el almacén con menor cantidad de un producto en la lista de almacenes
-    private Almacen getAlmacenConMenorCantidadProducto() {
-        Almacen destino = null;
-        int minCantidad = Integer.MAX_VALUE;
-
-        Node<Almacen> auxAlmacenes = todosAlmacenes.getRoot();
-        while (auxAlmacenes != null) {
-            int cantidadProducto = auxAlmacenes.getData().getCantidadProducto();
-            if (cantidadProducto < minCantidad) {
-                destino = auxAlmacenes.getData();
-                minCantidad = cantidadProducto;
-            }
-            auxAlmacenes = auxAlmacenes.getNextNode();
-        }
-
-        return destino;
-    }
-
-    // Método para dar de baja un almacén
-    public static void darDeBajaAlmacen(Almacen almacenaDarDeBaja) {
-        // Trasladar los productos del almacén a otros almacenes
-        almacenaDarDeBaja.trasladarProductos(almacenaDarDeBaja);
-
-        // Eliminar el almacén de la lista de todos los almacenes
-        todosAlmacenes.remove(almacenaDarDeBaja);
-    }
-
-    // Método para obtener la cantidad de un producto en el almacén
-    private int getCantidadProducto() {
-        int cantidad = 0;
-        Node<A> aux = productos.getRoot();
-
-        while (aux != null) {
-            cantidad++;
-            aux = aux.getNextNode();
-        }
-
-        return cantidad;
-    }
-
+    public int totalProductos() {
+        return inventario.getStockTotal();
+    }   
 
     @Override
-    public String toString () {
-        return "Nombre >>> "+this.nombre+"\nCodigo >>> "+this.codigo+"Direccion >>> "+this.direccion;
+    public String toString() {
+        return nombre;
     }
 }

@@ -1,46 +1,49 @@
+package proyecto;
 
-
-public class Producto {
+public class Producto implements Comparable<Producto> {
     private int codigo;
-    private double precio;
     private String descripcion;
-    private Integer stock;
+    private int stock;
+    private int codigoAlmacen; // Nuevo campo
 
-    public Producto(int codigo, String nombre, double precio, int stock) {
+    public Producto(int codigo, String descripcion, int stock, int codigoAlmacen) {
         this.codigo = codigo;
-        this.precio = precio;
-        this.descripcion = nombre;
+        this.descripcion = descripcion;
         this.stock = stock;
+        this.codigoAlmacen = codigoAlmacen; // Inicialización del nuevo campo
     }
-    public Producto() {
-        this(0, null, 0, 0);
-    }
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
-    }
-    public Integer getCodigo() {
+
+    public int getCodigo() {
         return codigo;
     }
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+
     public String getDescripcion() {
         return descripcion;
     }
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
-    public Integer getStock() {
+
+    public int getStock() {
         return stock;
     }
-    public double getPrecio() {
-        return precio;
+
+    public void setStock(int stock) {
+        this.stock = stock;
     }
-    public void setPrecio(double precio) {
-        this.precio = precio;
+
+    public int getCodigoAlmacen() { // Getter del nuevo campo
+        return codigoAlmacen;
     }
+
+    public void setCodigoAlmacen(int codigoAlmacen) { // Setter del nuevo campo
+        this.codigoAlmacen = codigoAlmacen;
+    }
+
     @Override
-    public String toString () {
-        return "Codigo >>> "+this.codigo+"\nDescripcion >>> "+this.descripcion+"Stock >>> "+this.stock;
+    public int compareTo(Producto otroProducto) {
+        return Integer.compare(this.codigo, otroProducto.codigo);
+    }
+
+    @Override
+    public String toString() {
+        return "Código: " + codigo + ", Descripción: " + descripcion + ", Stock: " + stock + ", Código Almacén: " + codigoAlmacen;
     }
 }
